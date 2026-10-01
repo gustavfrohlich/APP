@@ -1,9 +1,11 @@
 // Terv: tartalék hét felhasználása és jövőbeli hét áthelyezése (a kezdés előtt minden teszthét jövőbeli).
 import { expect, test } from '@playwright/test';
+import { skipOnboarding } from './helpers';
 
 test('tartalék hét felhasználása és átrendezés', async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-10-01T09:00:00'));
   await page.goto('/#/terv');
+  await skipOnboarding(page);
   const timeline = page.getByRole('list', { name: 'A hetek idővonala' });
   await timeline.getByRole('button', { name: /tartalék hét/ }).click();
   await page.getByRole('button', { name: 'Tartalék hét felhasználása' }).click();

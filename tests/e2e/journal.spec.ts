@@ -1,7 +1,10 @@
 // Napló: táblázat cellánkénti szerkesztése billentyűzettel, és a naptár nézet üres állapota.
 import { expect, test } from '@playwright/test';
+import { skipOnboarding } from './helpers';
 
 test('táblázat: gépelés, Enter, nyilak', async ({ page }) => {
+  await page.goto('/');
+  await skipOnboarding(page);
   await page.goto('/#/naplo?nezet=table');
   const grid = page.getByRole('grid');
   await expect(grid).toBeVisible();
@@ -27,6 +30,7 @@ test('táblázat: gépelés, Enter, nyilak', async ({ page }) => {
 
 test('naptár: üres állapot és nap részletei', async ({ page }) => {
   await page.goto('/#/naplo');
+  await skipOnboarding(page);
   await expect(page.getByText('Még üres a napló')).toBeVisible();
   await expect(
     page.getByRole('heading', { level: 2, name: /okt\.|szept\.|nov\./ }).first(),

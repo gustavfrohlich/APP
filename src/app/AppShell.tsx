@@ -1,9 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
 import { Sidebar } from '@/app/Sidebar';
 import { NAV_ITEMS } from '@/app/nav';
 import { Header } from '@/app/Header';
 import { CommandPalette } from '@/app/CommandPalette';
+import { UpdateToast } from '@/app/UpdateToast';
+import { useAppData, useRepo } from '@/data/context';
+
+const Onboarding = lazy(() =>
+  import('@/features/onboarding/Onboarding').then((m) => ({ default: m.Onboarding })),
+);
 import { MotionProvider } from '@/app/Motion';
 import { CheckinProvider } from '@/features/checkin/CheckinHost';
 import { hasMod } from '@/lib/platform';
@@ -11,6 +17,9 @@ import { readLocal, writeLocal } from '@/lib/localPref';
 
 export function AppShell() {
   const navigate = useNavigate();
+  const { mode } = useRepo();
+  const { settings, days } = useAppData();
+  const needsOnboarding = mode === 'real' && !settings.onboardedAt && days.length === 0;
   const [collapsed, setCollapsed] = useState(() => readLocal('bazis.navCollapsed') === '1');
 
   const toggle = useCallback(() => {
@@ -64,6 +73,12 @@ export function AppShell() {
           </div>
         </div>
         <CommandPalette />
+        <UpdateToast />
+        {needsOnboarding && (
+          <Suspense fallback={null}>
+            <Onboarding />
+          </Suspense>
+        )}
       </CheckinProvider>
     </MotionProvider>
   );

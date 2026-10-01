@@ -2,9 +2,11 @@
 // Asztali (1440×900) és laptop (1280×800) nézetben fut (lásd playwright.config.ts).
 
 import { expect, test, type Page } from '@playwright/test';
+import { skipOnboarding } from './helpers';
 
 async function fresh(page: Page) {
   await page.goto('/');
+  await skipOnboarding(page);
   await expect(page.getByRole('heading', { level: 2, name: /Reggel/ })).toBeVisible();
 }
 
@@ -17,15 +19,23 @@ test('reggeli check-in csak billentyűzettel', async ({ page }) => {
   await expect(dialog).toBeVisible();
 
   // Hely: a javaslat elfogadása Enterrel, majd „Nem” a barátnőre (N betű).
+  await expect(dialog.getByRole('radio', { name: 'Budapest' })).toBeFocused();
   await page.keyboard.press('Enter');
-  await page.waitForTimeout(350);
+  await expect(dialog.getByRole('radio', { name: 'Igen' })).toBeFocused();
   await page.keyboard.press('n');
-  await page.waitForTimeout(350);
   // Alvásminőség: 7
+  await expect(
+    dialog
+      .getByRole('radiogroup', { name: /Milyen volt az alvás/ })
+      .getByRole('radio')
+      .first(),
+  ).toBeFocused();
   await page.keyboard.press('7');
-  await page.waitForTimeout(350);
+  await expect(dialog.getByLabel('Alvásidő')).toBeFocused();
   // Óraadatok: maszkolt bevitel, Enterrel tovább.
-  for (const v of ['756', '11', '42', '205', '84', '51,5']) {
+  const labels = ['Alvásidő', 'Ébren', 'Mély', 'REM', 'HRV', 'Pulzus'];
+  for (const [i, v] of ['756', '11', '42', '205', '84', '51,5'].entries()) {
+    await expect(dialog.getByLabel(labels[i]!, { exact: true })).toBeFocused();
     await page.keyboard.type(v);
     await page.keyboard.press('Enter');
   }
@@ -49,18 +59,32 @@ test('esti check-in csak billentyűzettel', async ({ page }) => {
   const dialog = page.getByRole('dialog', { name: /Este – a napról/ });
   await expect(dialog).toBeVisible();
 
+  await expect(
+    dialog
+      .getByRole('radiogroup', { name: 'Orr / légzés', exact: true })
+      .getByRole('radio')
+      .first(),
+  ).toBeFocused();
   // Orr 2, fáradtság 3, evés utáni fáradtság 1, puffadás 4 → „Mikor?”: 3. lehetőség (Ebéd után).
-  for (const d of ['2', '3', '1', '4']) {
+  // Az „1” után a skála fél másodpercig vár egy „0”-ra; a következő számjegy ezt lezárja.
+  for (const [d, next] of [
+    ['2', 'Fáradtság'],
+    ['3', 'Evés utáni fáradtság'],
+    ['1', 'Puffadás'],
+  ] as const) {
     await page.keyboard.press(d);
-    await page.waitForTimeout(350);
+    await expect(
+      dialog.getByRole('radiogroup', { name: next, exact: true }).getByRole('radio').first(),
+    ).toBeFocused();
   }
-  await expect(dialog.getByRole('radiogroup', { name: 'Puffadás mikor?' })).toBeVisible();
+  await page.keyboard.press('4');
+  await expect(
+    dialog.getByRole('radiogroup', { name: 'Puffadás mikor?' }).getByRole('radio').first(),
+  ).toBeFocused();
   await page.keyboard.press('3');
-  await page.waitForTimeout(350);
   // A nap röviden: „Minden stimmel”
   await expect(dialog.getByRole('button', { name: /Minden stimmel/ })).toBeFocused();
   await page.keyboard.press('Enter');
-  await page.waitForTimeout(150);
   // Címkék: „Tovább”
   await expect(dialog.getByRole('button', { name: 'Tovább' })).toBeFocused();
   await page.keyboard.press('Enter');
@@ -77,10 +101,11 @@ test('esti check-in csak billentyűzettel', async ({ page }) => {
 test('Esc bezárja a panelt, a válasz megmarad', async ({ page }) => {
   await fresh(page);
   await page.keyboard.press('r');
+  await expect(page.getByRole('radio', { name: 'Budapest' })).toBeFocused();
   await page.keyboard.press('Enter');
-  await page.waitForTimeout(350);
+  await expect(page.getByRole('radio', { name: 'Igen' })).toBeFocused();
   await page.keyboard.press('i');
-  await page.waitForTimeout(350);
+  await expect(page.getByRole('radio', { name: 'Igen' })).toHaveAttribute('aria-checked', 'true');
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toBeHidden();
   await expect(

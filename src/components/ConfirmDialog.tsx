@@ -10,6 +10,7 @@ export function ConfirmDialog({
   confirmLabel,
   onConfirm,
   danger = true,
+  confirmDisabled,
   children,
 }: {
   open: boolean;
@@ -19,6 +20,7 @@ export function ConfirmDialog({
   confirmLabel: string;
   onConfirm: () => void;
   danger?: boolean;
+  confirmDisabled?: boolean;
   children?: ReactNode;
 }) {
   return (
@@ -38,7 +40,11 @@ export function ConfirmDialog({
               <Button variant="secondary">Mégse</Button>
             </AlertDialog.Cancel>
             <AlertDialog.Action asChild>
-              <Button variant={danger ? 'danger' : 'primary'} onClick={onConfirm}>
+              <Button
+                variant={danger ? 'danger' : 'primary'}
+                onClick={onConfirm}
+                disabled={confirmDisabled}
+              >
                 {confirmLabel}
               </Button>
             </AlertDialog.Action>

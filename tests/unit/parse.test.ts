@@ -94,6 +94,20 @@ describe('okos beillesztés', () => {
       rhrNight: 54.2,
     });
   });
+  it('az iOS Parancsok sablonja (percben)', () => {
+    expect(
+      parseSmartPaste(
+        'Alvás 476 perc, Ébren 11 perc, Mély 42 perc, REM 125 perc, HRV 84, Pulzus 51,5',
+      ),
+    ).toEqual({
+      sleepMin: 476,
+      awakeMin: 11,
+      deepMin: 42,
+      remMin: 125,
+      hrvNight: 84,
+      rhrNight: 51.5,
+    });
+  });
   it('értelmetlen szövegből semmi', () => {
     expect(parseSmartPaste('szia, hogy vagy?')).toEqual({});
   });
