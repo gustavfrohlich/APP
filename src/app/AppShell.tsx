@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router';
-import * as Tooltip from '@radix-ui/react-tooltip';
 import { Sidebar } from '@/app/Sidebar';
 import { NAV_ITEMS } from '@/app/nav';
 import { Header } from '@/app/Header';
+import { CommandPalette } from '@/app/CommandPalette';
+import { MotionProvider } from '@/app/Motion';
+import { CheckinProvider } from '@/features/checkin/CheckinHost';
 import { hasMod } from '@/lib/platform';
 import { readLocal, writeLocal } from '@/lib/localPref';
 
@@ -40,26 +42,29 @@ export function AppShell() {
   }, [navigate, toggle]);
 
   return (
-    <Tooltip.Provider delayDuration={350} skipDelayDuration={150}>
-      <a
-        href="#main"
-        className="sr-only z-50 rounded-lg bg-surface px-3 py-2 focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
-      >
-        Ugrás a tartalomra
-      </a>
-      <div className="flex min-h-dvh">
-        <Sidebar collapsed={collapsed} onToggle={toggle} />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <Header />
-          <main
-            id="main"
-            tabIndex={-1}
-            className="mx-auto w-full max-w-[1280px] flex-1 px-6 pb-16 lg:px-10"
-          >
-            <Outlet />
-          </main>
+    <MotionProvider>
+      <CheckinProvider>
+        <a
+          href="#main"
+          className="sr-only z-50 rounded-lg bg-surface px-3 py-2 focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+        >
+          Ugrás a tartalomra
+        </a>
+        <div className="flex min-h-dvh">
+          <Sidebar collapsed={collapsed} onToggle={toggle} />
+          <div className="flex min-w-0 flex-1 flex-col">
+            <Header />
+            <main
+              id="main"
+              tabIndex={-1}
+              className="mx-auto w-full max-w-[1280px] flex-1 px-6 pb-16 lg:px-10"
+            >
+              <Outlet />
+            </main>
+          </div>
         </div>
-      </div>
-    </Tooltip.Provider>
+        <CommandPalette />
+      </CheckinProvider>
+    </MotionProvider>
   );
 }

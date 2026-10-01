@@ -89,7 +89,7 @@ export function planItems(food: string): string[] {
   if (!cleaned || /^tartalék( hét)?$/i.test(cleaned) || cleaned === '–') return [];
   return cleaned
     .split(/\s*[+,]\s*|\s+és\s+/)
-    .map((s) => s.trim())
+    .map((s) => s.trim().replace(/\s+külön$/i, ''))
     .filter(Boolean);
 }
 

@@ -91,15 +91,13 @@ describe('repository', () => {
   it('migráció: az 1. verziós adatbázis 2-re frissül', async () => {
     const name = `legacy-${n}`;
     const legacy = new Dexie(name);
-    legacy
-      .version(1)
-      .stores({
-        days: 'date',
-        plan: 'week',
-        settings: 'id',
-        baselineNights: 'date',
-        baselineDays: 'date',
-      });
+    legacy.version(1).stores({
+      days: 'date',
+      plan: 'week',
+      settings: 'id',
+      baselineNights: 'date',
+      baselineDays: 'date',
+    });
     await legacy.open();
     await legacy.table('plan').bulkPut([
       { week: 1, food: 'x', eat: '', tip: '' },

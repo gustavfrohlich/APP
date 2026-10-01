@@ -1,8 +1,8 @@
 // Magyar formázás: „7:56”, „72,5 ms”, „csütörtök, okt. 8.”, „−0,4”.
 
-import { format } from 'date-fns';
+import type { Day, Month } from 'date-fns';
 import { hu } from 'date-fns/locale/hu';
-import { toLocalDate, weekdayIndex } from './dates';
+import { weekdayIndex } from './dates';
 import { METRICS, type NumericMetric } from './metrics';
 import type { ISODate } from './types';
 
@@ -75,24 +75,39 @@ export function weekdayShort(iso: ISODate): string {
   return WEEKDAY_SHORT[weekdayIndex(iso)]!;
 }
 
+// A date-fns hu locale névadatai (a teljes format() nélkül, hogy kicsi maradjon a csomag).
+const monthAbbr = (m: number) => hu.localize.month(m as Month, { width: 'abbreviated' }) as string;
+const monthWide = (m: number) => hu.localize.month(m as Month, { width: 'wide' }) as string;
+/** date-fns: 0 = vasárnap */
+const dayWide = (jsDay: number) => hu.localize.day(jsDay as Day, { width: 'wide' }) as string;
+
+function parts(iso: ISODate): { y: number; m: number; d: number } {
+  const [y, m, d] = iso.split('-').map(Number) as [number, number, number];
+  return { y, m: m - 1, d };
+}
+
 /** „csütörtök, okt. 8.” */
 export function formatDateLong(iso: ISODate): string {
-  return format(toLocalDate(iso), 'EEEE, MMM d.', { locale: hu });
+  const { m, d } = parts(iso);
+  return `${dayWide((weekdayIndex(iso) + 1) % 7)}, ${monthAbbr(m)} ${d}.`;
 }
 
 /** „okt. 8.” */
 export function formatDateShort(iso: ISODate): string {
-  return format(toLocalDate(iso), 'MMM d.', { locale: hu });
+  const { m, d } = parts(iso);
+  return `${monthAbbr(m)} ${d}.`;
 }
 
 /** „2026. október” */
 export function formatMonth(iso: ISODate): string {
-  return format(toLocalDate(iso), 'yyyy. LLLL', { locale: hu });
+  const { y, m } = parts(iso);
+  return `${y}. ${monthWide(m)}`;
 }
 
 /** „2026. okt. 8.” */
 export function formatDateFull(iso: ISODate): string {
-  return format(toLocalDate(iso), 'yyyy. MMM d.', { locale: hu });
+  const { y, m, d } = parts(iso);
+  return `${y}. ${monthAbbr(m)} ${d}.`;
 }
 
 /** „okt. 5. – okt. 11.” */

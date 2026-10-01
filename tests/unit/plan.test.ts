@@ -27,7 +27,7 @@ describe('terv', () => {
       'csirke',
     ]);
     expect(planItems('+ tojás (tej nélkül)')).toEqual(['tojás']);
-    expect(planItems('hagyma + fokhagyma külön')).toEqual(['hagyma', 'fokhagyma külön']);
+    expect(planItems('hagyma + fokhagyma külön')).toEqual(['hagyma', 'fokhagyma']);
     expect(planItems('tartalék hét')).toEqual([]);
   });
   it('engedélyezett ételek: bázis + ami átment + az aktuális új étel (kumulatív)', () => {

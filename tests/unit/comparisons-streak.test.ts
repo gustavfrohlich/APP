@@ -82,3 +82,23 @@ describe('kitöltöttség, kimaradás és streak', () => {
     expect(catchUpForYesterday(map, '2026-10-05', '2026-10-05')).toBeUndefined();
   });
 });
+
+import { checkinState } from '@/domain/entries';
+
+describe('check-in állapot a Ma képernyőhöz', () => {
+  it('kitöltendő / félbehagyott / kész', () => {
+    expect(checkinState(undefined, 'morning')).toBe('todo');
+    expect(checkinState(entry('2026-10-05', { location: 'budapest' }), 'morning')).toBe('partial');
+    expect(
+      checkinState(entry('2026-10-05', { location: 'budapest', sleepQuality: 7 }), 'morning'),
+    ).toBe('done');
+    expect(checkinState(entry('2026-10-05', { morningDoneAt: 'x' }), 'morning')).toBe('done');
+    expect(checkinState(entry('2026-10-05', { nose: 1 }), 'evening')).toBe('partial');
+    expect(
+      checkinState(
+        entry('2026-10-05', { nose: 1, fatigue: 1, postMealFatigue: 1, bloating: 0 }),
+        'evening',
+      ),
+    ).toBe('done');
+  });
+});

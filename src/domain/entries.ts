@@ -67,3 +67,30 @@ export function compactEntry(entry: DayEntry): DayEntry {
   }
   return out as unknown as DayEntry;
 }
+
+export type CheckinState = 'todo' | 'partial' | 'done';
+
+/**
+ * A check-in állapota a Ma képernyőhöz: kész (lezárva, vagy a fő kérdések megvannak),
+ * félbehagyott (van már válasz), vagy kitöltendő.
+ */
+export function checkinState(
+  entry: DayEntry | undefined,
+  kind: 'morning' | 'evening',
+): CheckinState {
+  if (!entry) return 'todo';
+  if (kind === 'morning') {
+    if (entry.morningDoneAt) return 'done';
+    if (entry.sleepQuality !== undefined && entry.location !== undefined) return 'done';
+    return morningDone(entry) ? 'partial' : 'todo';
+  }
+  if (entry.eveningDoneAt) return 'done';
+  if (
+    ['nose', 'fatigue', 'postMealFatigue', 'bloating'].every(
+      (k) => entry[k as keyof DayEntry] !== undefined,
+    )
+  ) {
+    return 'done';
+  }
+  return eveningDone(entry) ? 'partial' : 'todo';
+}
