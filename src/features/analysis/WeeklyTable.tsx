@@ -71,7 +71,12 @@ export function WeeklyTable({
 }) {
   return (
     <div className="@container">
-      <div className="hidden overflow-x-auto @4xl:block">
+      <div
+        className="hidden overflow-x-auto @4xl:block"
+        role="region"
+        aria-label="Heti összesítő táblázat"
+        tabIndex={0}
+      >
         <table className="w-full border-separate border-spacing-0 text-[13px]">
           <thead>
             <tr className="text-left text-[11px] font-semibold tracking-wide text-muted uppercase">

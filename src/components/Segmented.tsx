@@ -29,7 +29,7 @@ export interface SegmentedProps<T extends string | boolean> {
 const ACCENT = {
   night: 'bg-night text-white dark:text-[#121418]',
   day: 'bg-day text-white dark:text-[#121418]',
-  plan: 'bg-plan text-white dark:text-[#121418]',
+  plan: 'bg-plan-ink text-white dark:text-[#121418]',
 };
 
 export function Segmented<T extends string | boolean>({

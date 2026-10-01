@@ -78,10 +78,19 @@ export function Help() {
 
       <H>Mezők és skálák</H>
       <table className="w-full text-[14px]">
+        <thead className="sr-only">
+          <tr>
+            <th scope="col">Mező</th>
+            <th scope="col">Mikor</th>
+            <th scope="col">Mit jelent</th>
+          </tr>
+        </thead>
         <tbody>
           {FIELDS.map(([f, when, what]) => (
             <tr key={f} className="border-t border-line align-top">
-              <td className="py-2 pr-3 font-medium whitespace-nowrap">{f}</td>
+              <th scope="row" className="py-2 pr-3 text-left font-medium whitespace-nowrap">
+                {f}
+              </th>
               <td className="py-2 pr-3 text-muted">{when}</td>
               <td className="py-2">{what}</td>
             </tr>

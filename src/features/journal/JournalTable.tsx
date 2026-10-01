@@ -273,7 +273,7 @@ export function JournalTable({
                         !fill && !sticky && 'bg-surface',
                         fill && 'text-scale-ink',
                         missed && sticky && 'text-muted italic',
-                        future && 'text-muted/50',
+                        future && 'text-muted',
                         isActive && 'z-[15] shadow-[inset_0_0_0_2px_var(--night)]',
                       )}
                     >

@@ -157,14 +157,19 @@ export function Scale({
                   choose(v, true);
                 }
               }}
-              style={{ background: valueFill(v, min, max, reversed) }}
+              style={{
+                // A nem választott értékeknél csak a háttér halványul, a szám olvasható marad.
+                background:
+                  !selected && value !== undefined
+                    ? `color-mix(in oklab, ${valueFill(v, min, max, reversed)} 40%, var(--surface))`
+                    : valueFill(v, min, max, reversed),
+              }}
               className={cn(
                 btn,
-                'num grid shrink-0 place-items-center rounded-full font-semibold text-scale-ink transition-[transform,box-shadow,opacity] duration-150 outline-none',
+                'num grid shrink-0 place-items-center rounded-full font-semibold text-scale-ink transition-[transform,box-shadow,background-color] duration-150 outline-none',
                 'hover:scale-[1.08] focus-visible:ring-2 focus-visible:ring-night focus-visible:ring-offset-2 focus-visible:ring-offset-surface',
                 selected && 'scale-[1.12] shadow-[0_0_0_2px_var(--surface),0_0_0_4px_var(--ink)]',
-                !selected && value !== undefined && 'opacity-55 hover:opacity-100',
-                isSuggested && 'opacity-70 outline-2 outline-offset-2 outline-muted outline-dashed',
+                isSuggested && 'outline-2 outline-offset-2 outline-muted outline-dashed',
               )}
             >
               {v}

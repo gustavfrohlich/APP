@@ -8,7 +8,7 @@ A végleges döntések a README „Döntések” részében vannak.
 ```
 .
 ├── docs/                  terv, jegyzetek
-├── public/                ikonok (svg + png), robots.txt
+├── public/                ikonok (svg + png), robots.txt, theme-init.js, _headers
 ├── scripts/               ikon-generálás (Playwright → PNG)
 ├── src/
 │   ├── domain/            TISZTA TypeScript, React nélkül – minden számítás

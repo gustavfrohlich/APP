@@ -1,0 +1,9 @@
+# Netlify és Cloudflare Pages: biztonsági fejlécek (a CSP a HTML-ben is benne van).
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  X-Frame-Options: DENY
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  Cross-Origin-Opener-Policy: same-origin
+/sw.js
+  Cache-Control: no-cache

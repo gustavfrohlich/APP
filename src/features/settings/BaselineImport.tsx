@@ -387,7 +387,7 @@ export function BaselineImport({
       )}
 
       {(nights.length > 0 || daysRows.length > 0) && (
-        <div className="mt-4 overflow-x-auto">
+        <div className="mt-4 overflow-x-auto" role="region" aria-label="Előnézet" tabIndex={0}>
           <div className="label-caps mb-2">Előnézet</div>
           <table className="w-full text-[13px]">
             <thead>

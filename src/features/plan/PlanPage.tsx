@@ -195,7 +195,7 @@ export default function PlanPage() {
                   aria-hidden
                   className={cn(
                     'z-[1] mt-4 grid size-[56px] shrink-0 place-items-center rounded-full font-serif text-lg font-semibold ring-4 ring-bg',
-                    status === 'current' && 'bg-plan text-white dark:text-[#121418]',
+                    status === 'current' && 'bg-plan-ink text-white dark:text-[#121418]',
                     status === 'future' &&
                       'bg-surface text-muted ring-4 [box-shadow:inset_0_0_0_2px_var(--line)] ring-bg',
                     status === 'open' && 'bg-amber-fill text-amber',
@@ -238,7 +238,7 @@ export default function PlanPage() {
                           className={cn(
                             'rounded-full px-2 py-0.5 text-[11px] font-semibold tracking-wide uppercase',
                             status === 'current'
-                              ? 'bg-plan text-white dark:text-[#121418]'
+                              ? 'bg-plan-ink text-white dark:text-[#121418]'
                               : 'bg-surface-2 text-muted',
                           )}
                         >
@@ -335,7 +335,7 @@ export default function PlanPage() {
                             {!w.result && canCloseWeek(w.week, info) && (
                               <Link
                                 to={`/elemzes?lezaras=${w.week}`}
-                                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-plan px-3 text-[13px] font-medium text-white dark:text-[#121418]"
+                                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-plan-ink px-3 text-[13px] font-medium text-white dark:text-[#121418]"
                               >
                                 <CalendarCheck className="size-3.5" aria-hidden /> Hét lezárása
                               </Link>

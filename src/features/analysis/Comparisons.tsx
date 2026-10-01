@@ -46,7 +46,9 @@ export function ComparisonCard({ c }: { c: Comparison }) {
       <table className="w-full text-[13px]">
         <thead>
           <tr className="text-[11px] text-muted">
-            <th className="py-1 text-left font-medium" />
+            <th className="py-1 text-left font-medium">
+              <span className="sr-only">Mutató</span>
+            </th>
             <th className="py-1 text-right font-medium">
               {c.a.label}
               <div className="num font-normal">{c.a.n} éjszaka</div>

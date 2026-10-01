@@ -70,7 +70,7 @@ export function Stepper({ value, suggested, min, max, onChange, label, unit }: S
         }}
         className={cn(
           'num grid h-9 min-w-10 place-items-center rounded-lg px-1 text-lg font-semibold outline-none focus-visible:ring-2 focus-visible:ring-night',
-          value === undefined && 'text-muted/80 italic',
+          value === undefined && 'text-muted italic',
         )}
       >
         {shown ?? '–'}

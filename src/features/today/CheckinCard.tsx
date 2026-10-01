@@ -82,10 +82,10 @@ export function CheckinCard({ kind, entry, baseline, onOpen, muted }: Props) {
       className={cn(
         'card relative flex min-h-[208px] flex-col overflow-hidden p-6',
         state !== 'done' &&
+          !(muted && state === 'todo') &&
           (isMorning
             ? 'bg-[color-mix(in_oklab,var(--night)_9%,var(--surface))]'
             : 'bg-[color-mix(in_oklab,var(--day)_9%,var(--surface))]'),
-        muted && state === 'todo' && 'opacity-80',
       )}
       aria-label={`${title} – ${subtitle}`}
     >

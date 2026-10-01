@@ -130,7 +130,9 @@ export function CalendarHeatmap({
                         {pw.food.replace(/^\+\s*/, '')}
                       </span>
                     </div>
-                  ) : null}
+                  ) : (
+                    <span className="sr-only">{w < 1 ? 'alapidőszak' : `${w}. hét`}</span>
+                  )}
                 </th>
                 {days.map((d) => {
                   const e = entries.get(d);
@@ -148,11 +150,15 @@ export function CalendarHeatmap({
                         onClick={() => onSelect(d)}
                         aria-pressed={isSel}
                         aria-label={`${formatDateLong(d)}${v !== undefined ? `, ${formatNumber(v, metric === 'nightScore' ? 2 : 1)}` : ''}${missed ? ', kimaradt' : ''}`}
-                        style={{ background: fill }}
+                        style={{
+                          background:
+                            fill && !inMonth
+                              ? `color-mix(in oklab, ${fill} 40%, var(--surface))`
+                              : fill,
+                        }}
                         className={cn(
                           'relative flex aspect-square w-full flex-col justify-between rounded-xl p-1.5 text-left transition-[box-shadow,transform]',
                           !fill && 'bg-surface-2/60',
-                          !inMonth && 'opacity-40',
                           future && 'cursor-default opacity-30',
                           missed && 'border-[1.5px] border-dashed border-muted/60 bg-transparent',
                           d === today &&
@@ -161,11 +167,16 @@ export function CalendarHeatmap({
                           !future && 'hover:scale-[1.04]',
                         )}
                       >
-                        <span className="num text-[12px] font-semibold text-scale-ink">
+                        <span
+                          className={cn(
+                            'num text-[12px] font-semibold',
+                            inMonth ? 'text-scale-ink' : 'text-muted',
+                          )}
+                        >
                           {Number(d.slice(8))}
                         </span>
                         {!future && (
-                          <span className="self-end">
+                          <span className={cn('self-end', !inMonth && 'opacity-50')}>
                             <HalfDot
                               morning={checkinState(e, 'morning')}
                               evening={checkinState(e, 'evening')}

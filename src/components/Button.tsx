@@ -18,7 +18,7 @@ const VARIANTS: Record<Variant, string> = {
   primary: 'bg-ink text-bg hover:bg-ink/90',
   night: 'bg-night text-white hover:brightness-110 dark:text-[#121418]',
   day: 'bg-day text-white hover:brightness-110 dark:text-[#121418]',
-  plan: 'bg-plan text-white hover:brightness-105 dark:text-[#121418]',
+  plan: 'bg-plan-ink text-white hover:brightness-105 dark:text-[#121418]',
   secondary: 'bg-surface-2 text-ink hover:bg-line/70 ring-1 ring-inset ring-line',
   ghost: 'text-muted hover:bg-surface-2 hover:text-ink',
   danger: 'bg-bad text-white hover:brightness-110 dark:text-[#121418]',

@@ -63,10 +63,10 @@ export function Header() {
             type="button"
             onClick={() => window.dispatchEvent(new Event('bazis:palette'))}
             className="flex h-10 items-center gap-2 rounded-xl px-3 text-[14px] text-muted ring-1 ring-line transition-colors ring-inset hover:bg-surface-2 hover:text-ink"
-            aria-label="Parancspaletta megnyitása"
+            aria-keyshortcuts="Control+K Meta+K"
           >
             <Search className="size-4" aria-hidden />
-            <span className="hidden md:inline">Parancsok</span>
+            <span className="sr-only md:not-sr-only">Parancsok</span>
             <kbd className="kbd hidden md:inline-flex">{modKey()} K</kbd>
           </button>
         </Tip>
