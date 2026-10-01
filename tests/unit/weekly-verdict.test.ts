@@ -204,3 +204,12 @@ describe('javaslat a hét lezárásához', () => {
     expect(v.summary).toMatch(/nincs elég adat/i);
   });
 });
+
+describe('javaslat szövege', () => {
+  it('nagy ugrásnál természetes mondat', () => {
+    const v = suggestVerdict(compareKeyValues({ bloating: 6 }, { bloating: 4 }, 8));
+    expect(v.summary).toBe('Reakció valószínű: a puffadás legalább 2 ponttal nőtt.');
+    const w = suggestVerdict(compareKeyValues({ sleepQuality: 5 }, { sleepQuality: 7 }, 8));
+    expect(w.summary).toBe('Reakció valószínű: az alvásminőség legalább 2 ponttal csökkent.');
+  });
+});

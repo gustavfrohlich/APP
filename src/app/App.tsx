@@ -9,6 +9,7 @@ const JournalPage = lazy(() => import('@/features/journal/JournalPage'));
 const AnalysisPage = lazy(() => import('@/features/analysis/AnalysisPage'));
 const PlanPage = lazy(() => import('@/features/plan/PlanPage'));
 const SettingsPage = lazy(() => import('@/features/settings/SettingsPage'));
+const DoctorSummary = lazy(() => import('@/features/analysis/DoctorSummary'));
 
 function Lazy({ children }: { children: ReactNode }) {
   return <Suspense fallback={<div className="py-24" aria-busy="true" />}>{children}</Suspense>;
@@ -46,6 +47,14 @@ export function App() {
               element={
                 <Lazy>
                   <PlanPage />
+                </Lazy>
+              }
+            />
+            <Route
+              path="osszefoglalo"
+              element={
+                <Lazy>
+                  <DoctorSummary />
                 </Lazy>
               }
             />

@@ -88,10 +88,21 @@ export function suggestVerdict(c: WeekComparison): VerdictSuggestion {
   const names = c.worsened.map((k) => WORSEN_LABELS[k]);
 
   if (c.worsened.length >= 2 || bigJumps.length > 0) {
+    const jumpText = () => {
+      const up = bigJumps.filter((k) => k !== 'sleepQuality').map((k) => WORSEN_LABELS[k]);
+      const parts: string[] = [];
+      if (up.length)
+        parts.push(
+          `${article(up[0]!)} ${joinHu(up.map((l, i) => (i === 0 ? l : `${article(l)} ${l}`)))} legalább 2 ponttal nőtt`,
+        );
+      if (bigJumps.includes('sleepQuality'))
+        parts.push('az alvásminőség legalább 2 ponttal csökkent');
+      return `${joinHu(parts)}.`;
+    };
     const why =
       c.worsened.length >= 2
         ? `${c.worsened.length} mutató romlott (${joinHu(names)}).`
-        : `${bigJumps.map((k) => WORSEN_LABELS[k]).join(', ')}: legalább 2 pontos változás.`;
+        : jumpText();
     return { result: 'reaction', summary: `Reakció valószínű: ${why}`, reasons, bigJumps };
   }
   if (c.worsened.length === 1) {
