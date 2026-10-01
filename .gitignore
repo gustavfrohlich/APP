@@ -1,0 +1,40 @@
+# Függőségek, build
+node_modules/
+dist/
+dev-dist/
+coverage/
+*.tsbuildinfo
+.vite/
+
+# Tesztkimenetek
+test-results/
+playwright-report/
+blob-report/
+screenshots/
+
+# ---------------------------------------------------------------
+# SZEMÉLYES EGÉSZSÉGÜGYI ADATOK – soha ne kerüljenek a repóba!
+# A referenciafájlok és minden táblázat-/mentés-export.
+# ---------------------------------------------------------------
+Eliminacios_dieta_tracker*.xlsx
+sleep_readiness_data*.xlsx
+awake_rhr_with_hrv*.csv
+*.xlsx
+*.xls
+*.xlsm
+*.csv
+*.ics
+bazis-*.json
+bazis-mentes*.json
+private/
+reference/
+
+# Egyéb
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+.idea/
+.vscode/*
+!.vscode/extensions.json

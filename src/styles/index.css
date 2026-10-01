@@ -1,0 +1,225 @@
+@import 'tailwindcss';
+@import './fonts.css';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ------------------------------------------------------------------
+   Design tokenek – világos (alap) és sötét téma.
+   A színek szemantikája ugyanaz, mint az Excel-trackerben.
+   ------------------------------------------------------------------ */
+:root {
+  --bg: #faf8f5;
+  --surface: #ffffff;
+  --surface-2: #f3f1ed;
+  --ink: #1f2937;
+  --muted: #646b78;
+  --line: #e7e3dd;
+  --night: #3f4c7a;
+  --day: #8a5a3b;
+  --plan: #5b8c6e;
+  --plan-ink: #3c6b4f;
+  --good: #1e6b43;
+  --good-fill: #d7f0e0;
+  --bad: #9b2c2c;
+  --bad-fill: #f8d7d3;
+  --amber: #8a6116;
+  --amber-fill: #fcefcf;
+  --today: #ffe7a0;
+  --scale-0: #c8ebd5;
+  --scale-5: #fff0b8;
+  --scale-10: #f7c6c0;
+  --scale-ink: #1f2937;
+  --shadow: 0 1px 2px rgb(31 41 55 / 0.04), 0 4px 16px rgb(31 41 55 / 0.05);
+  --shadow-lg: 0 2px 6px rgb(31 41 55 / 0.06), 0 24px 64px rgb(31 41 55 / 0.14);
+  --card-border: transparent;
+  --nav-bg: rgb(250 248 245 / 0.72);
+  --overlay: rgb(31 41 55 / 0.28);
+  color-scheme: light;
+}
+
+[data-theme='dark'] {
+  --bg: #121418;
+  --surface: #1b1e24;
+  --surface-2: #23272f;
+  --ink: #eceef2;
+  --muted: #9aa1ad;
+  --line: #2a2e36;
+  --night: #9aa8e6;
+  --day: #e0a882;
+  --plan: #8cc7a3;
+  --plan-ink: #8cc7a3;
+  --good: #86d9a9;
+  --good-fill: #173826;
+  --bad: #f2a39c;
+  --bad-fill: #3b1c1c;
+  --amber: #f0c674;
+  --amber-fill: #3a2e12;
+  --today: #4a3d12;
+  --scale-0: #1d4430;
+  --scale-5: #4a4120;
+  --scale-10: #4f2624;
+  --scale-ink: #eceef2;
+  --shadow: none;
+  --shadow-lg: 0 24px 64px rgb(0 0 0 / 0.5);
+  --card-border: #2a2e36;
+  --nav-bg: rgb(18 20 24 / 0.72);
+  --overlay: rgb(0 0 0 / 0.55);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-night: var(--night);
+  --color-day: var(--day);
+  --color-plan: var(--plan);
+  --color-plan-ink: var(--plan-ink);
+  --color-good: var(--good);
+  --color-good-fill: var(--good-fill);
+  --color-bad: var(--bad);
+  --color-bad-fill: var(--bad-fill);
+  --color-amber: var(--amber);
+  --color-amber-fill: var(--amber-fill);
+  --color-today: var(--today);
+  --color-scale-ink: var(--scale-ink);
+
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Fraunces Variable', ui-serif, Georgia, serif;
+
+  --radius-card: 22px;
+  --shadow-card: var(--shadow);
+  --shadow-float: var(--shadow-lg);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.5;
+    font-feature-settings: 'cv11', 'ss01';
+    min-height: 100dvh;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--night) 25%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--night);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+@layer components {
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+  }
+  .label-caps {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .big-number {
+    font-size: 40px;
+    line-height: 1;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+  .input {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 10px 12px;
+    transition:
+      border-color 150ms,
+      box-shadow 150ms;
+  }
+  .input:hover {
+    border-color: color-mix(in oklab, var(--muted) 45%, var(--line));
+  }
+  .input:focus {
+    outline: none;
+    border-color: var(--night);
+    box-shadow: 0 0 0 3px color-mix(in oklab, var(--night) 22%, transparent);
+  }
+  .kbd {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.4em;
+    padding: 0 0.35em;
+    height: 1.4em;
+    font-size: 11px;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    border-radius: 5px;
+    border: 1px solid var(--line);
+    background: var(--surface-2);
+    color: var(--muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  @page {
+    margin: 16mm 14mm;
+  }
+  :root,
+  [data-theme='dark'] {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --ink: #111827;
+    --muted: #4b5563;
+    --card-border: #e5e7eb;
+    --shadow: none;
+  }
+  body {
+    background: #fff;
+  }
+  .no-print {
+    display: none !important;
+  }
+}

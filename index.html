@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="hu" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bázis</title>
+    <meta
+      name="description"
+      content="Eliminációs diéta napló – két rövid check-in naponta, heti elemzés. Minden adat a te gépeden marad."
+    />
+    <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAF8F5" />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#121418" />
+    <meta name="color-scheme" content="light dark" />
+    <script>
+      // Téma beállítása az első festés előtt (villanás nélkül). Csak a megjelenés kedvéért tárolt érték.
+      (function () {
+        var pref = 'system';
+        try {
+          pref = localStorage.getItem('bazis.theme') || 'system';
+        } catch (e) {}
+        var dark =
+          pref === 'dark' ||
+          (pref === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>A Bázis futtatásához JavaScript szükséges.</noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
