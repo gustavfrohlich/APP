@@ -2,10 +2,11 @@
 
 import { z } from 'zod';
 import { isISODate } from '../dates';
-import type { AppData, DayEntry, PlanWeek } from '../types';
+import type { PlanWeek } from '../types';
 
-export const BACKUP_APP = 'bazis';
-export const CURRENT_SCHEMA_VERSION = 2;
+import { BACKUP_APP, CURRENT_SCHEMA_VERSION } from './merge';
+
+export { BACKUP_APP, CURRENT_SCHEMA_VERSION, makeBackup, mergeDays, mergePlan } from './merge';
 
 const isoDate = z.string().refine(isISODate, 'Érvénytelen dátum');
 const optNum = z.number().finite().optional();
@@ -117,18 +118,6 @@ export const backupSchema = z.object({
 
 export type Backup = z.infer<typeof backupSchema>;
 
-export function makeBackup(data: AppData, now = new Date()): Backup {
-  return {
-    app: BACKUP_APP,
-    schemaVersion: CURRENT_SCHEMA_VERSION,
-    exportedAt: now.toISOString(),
-    data: {
-      ...data,
-      settings: { ...data.settings, demo: false, schemaVersion: CURRENT_SCHEMA_VERSION },
-    },
-  };
-}
-
 export type ParseBackupResult = { ok: true; backup: Backup } | { ok: false; error: string };
 
 export function parseBackup(text: string): ParseBackupResult {
@@ -165,30 +154,4 @@ export function migrateBackup(json: unknown): unknown {
     return { ...b, schemaVersion: 2 };
   }
   return json;
-}
-
-/** Összefésülés: dátumonként a frissebb (updatedAt) bejegyzés nyer. */
-export function mergeDays(current: readonly DayEntry[], incoming: readonly DayEntry[]): DayEntry[] {
-  const map = new Map(current.map((e) => [e.date, e]));
-  for (const e of incoming) {
-    const existing = map.get(e.date);
-    if (!existing || e.updatedAt > existing.updatedAt) map.set(e.date, e);
-  }
-  return [...map.values()].sort((a, b) => a.date.localeCompare(b.date));
-}
-
-/** Terv összefésülése: hetenként a lezárt/későbbi változat marad. */
-export function mergePlan(current: readonly PlanWeek[], incoming: readonly PlanWeek[]): PlanWeek[] {
-  const map = new Map(current.map((w) => [w.week, w]));
-  for (const w of incoming) {
-    const existing = map.get(w.week);
-    if (
-      !existing ||
-      (w.closedAt ?? '') > (existing.closedAt ?? '') ||
-      (!existing.result && w.result)
-    ) {
-      map.set(w.week, w);
-    }
-  }
-  return [...map.values()].sort((a, b) => a.week - b.week);
 }
