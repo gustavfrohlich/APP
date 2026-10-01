@@ -165,7 +165,7 @@ export function shiftAfter(plan: readonly PlanWeek[], afterWeek: number): PlanWe
   return renumber([...before, { ...WASHOUT_WEEK, week: 0 }, ...after]);
 }
 
-/** Jövőbeli hét áthelyezése (csak az aktuális utáni hetek között). */
+/** Jövőbeli hét áthelyezése (csak az aktuális utáni, nem bázis hetek között). */
 export function moveWeek(
   plan: readonly PlanWeek[],
   from: number,
@@ -175,6 +175,8 @@ export function moveWeek(
   const sorted = [...plan].sort((a, b) => a.week - b.week);
   if (from <= currentWeek || to <= currentWeek) return sorted;
   if (from < 1 || to < 1 || from > sorted.length || to > sorted.length) return sorted;
+  // A bázisépítő hetek (1–2.) a helyükön maradnak.
+  if (kindOf(sorted[from - 1]!) === 'base' || kindOf(sorted[to - 1]!) === 'base') return sorted;
   const items = [...sorted];
   const [moved] = items.splice(from - 1, 1);
   items.splice(to - 1, 0, moved!);

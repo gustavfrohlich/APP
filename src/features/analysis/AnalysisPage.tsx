@@ -31,13 +31,18 @@ export default function AnalysisPage() {
   const current = info.phase === 'running' ? info.week : info.phase === 'after' ? plan.length : 0;
   const cur = current >= 1 ? summaries[current - 1] : undefined;
 
-  // ?lezaras=1 (Ma képernyő, parancspaletta): a legkorábbi lezárható hét párbeszédablaka nyílik meg.
-  const wantClose = params.get('lezaras') === '1';
+  // ?lezaras=1 (Ma képernyő, parancspaletta): a legkorábbi lezárható hét párbeszédablaka nyílik meg;
+  // ?lezaras=hét-szám (Terv): az adott hété, ha már lezárható.
+  const closeParam = params.get('lezaras');
+  const wantClose = closeParam !== null;
   const [handledClose, setHandledClose] = useState(false);
   if (wantClose && !handledClose) {
     setHandledClose(true);
+    const asked = Number(closeParam);
     const target =
-      closable[0] ?? (current >= 1 && canCloseWeek(current, info) ? current : undefined);
+      closeParam !== '1' && Number.isInteger(asked) && canCloseWeek(asked, info)
+        ? asked
+        : (closable[0] ?? (current >= 1 && canCloseWeek(current, info) ? current : undefined));
     if (target) setClosing(target);
   }
   if (!wantClose && handledClose) setHandledClose(false);

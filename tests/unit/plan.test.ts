@@ -63,6 +63,13 @@ describe('terv', () => {
     const moved = moveWeek(DEFAULT_PLAN, 5, 7, 3);
     expect(moved.map((w) => w.food).slice(4, 7)).toEqual(['+ fűszerek', '+ cukor', '+ búza']);
     expect(moveWeek(DEFAULT_PLAN, 2, 7, 3)).toEqual(DEFAULT_PLAN);
+    // a kezdés előtt is: a bázishetek nem mozdulnak, és nem lehet közéjük tenni
+    expect(moveWeek(DEFAULT_PLAN, 5, 2, 0)).toEqual(DEFAULT_PLAN);
+    expect(
+      moveWeek(DEFAULT_PLAN, 5, 3, 0)
+        .map((w) => w.food)
+        .slice(2, 5),
+    ).toEqual(['+ búza', '+ tej', '+ tojás']);
   });
   it('hét állapota', () => {
     expect(weekStatus({ ...DEFAULT_PLAN[0]!, result: 'pass' }, 3)).toBe('closed');
